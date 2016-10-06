@@ -1,19 +1,49 @@
 licenses(["notice"])
 
+filegroup(
+  name = "platform_config",
+  srcs = select({
+      ":darwin": [
+        "glog_build/darwin/src/config.h",
+      ],
+      ":linux": [
+        "glog_build/k8/src/config.h",
+      ],
+  }),
+  visibility = ["//visibility:public"],
+)
+
+filegroup(
+  name = "platform_hdrs",
+  srcs = select({
+      ":darwin": [
+        "glog_build/darwin/include/glog/logging.h",
+        "glog_build/darwin/include/glog/raw_logging.h",
+        "glog_build/darwin/include/glog/stl_logging.h",
+        "glog_build/darwin/include/glog/vlog_is_on.h",
+      ],
+      ":linux": [
+        "glog_build/k8/include/glog/logging.h",
+        "glog_build/k8/include/glog/raw_logging.h",
+        "glog_build/k8/include/glog/stl_logging.h",
+        "glog_build/k8/include/glog/vlog_is_on.h",
+      ],
+  }),
+  visibility = ["//visibility:public"],
+)
+
 cc_library(
   visibility = ["//visibility:public"],
   name = "glog",
-  deps = [
-    "//third_party/libunwind:libunwind-k8",
-    "//third_party/gflags:gflags",
-  ],
+  deps = select({
+      ":darwin": [],
+      ":linux": ["//third_party/libunwind:libunwind-k8"],
+  }) + ["//third_party/gflags:gflags"],
   includes = [
-    "glog_build/k8/include",
     "upstream/src",
   ],
   copts = [
     "-DNO_FRAME_POINTER",
-    "-Ithird_party/glog/glog_build/k8/src",
   ],
   srcs = [
     "upstream/src/demangle.cc",
@@ -24,7 +54,7 @@ cc_library(
     "upstream/src/utilities.cc",
     "upstream/src/vlog_is_on.cc",
     # Private headers
-    "glog_build/k8/src/config.h",
+    ":platform_config",
     "upstream/src/base/commandlineflags.h",
     "upstream/src/base/googleinit.h",
     "upstream/src/base/mutex.h",
@@ -41,10 +71,7 @@ cc_library(
     "upstream/src/mock-log.h",
     "upstream/src/symbolize.h",
     "upstream/src/utilities.h",
-    "glog_build/k8/include/glog/logging.h",
-    "glog_build/k8/include/glog/raw_logging.h",
-    "glog_build/k8/include/glog/stl_logging.h",
-    "glog_build/k8/include/glog/vlog_is_on.h",
+    ":platform_hdrs"
   ],
   linkopts = [
     "-pthread"
@@ -94,4 +121,14 @@ cc_test(
   srcs = [
     "upstream/src/symbolize_unittest.cc",
   ],
+)
+
+config_setting(
+    name = "darwin",
+    values = {"cpu": "darwin"},
+)
+
+config_setting(
+    name = "linux",
+    values = {"cpu": "k8"},
 )
