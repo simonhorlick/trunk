@@ -76,7 +76,7 @@ cc_library(
     "upstream/folly/detail/BitsDetail.h",
     "upstream/folly/experimental/io/FsUtil.h",
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   srcs = [
     ":generate_format_tables",
     ":generate_escape_tables",
@@ -141,18 +141,14 @@ cc_library(
     "upstream/folly/gen/*.h",
     "upstream/folly/*.h",
     "upstream/folly/detail/*.h",
+    "upstream/folly/io/*.h",
   ]) + [
     "upstream/folly/experimental/ReadMostlySharedPtr.h",
     "upstream/folly/experimental/TLRefCount.h",
-    "upstream/folly/io/Compression.h",
-    "upstream/folly/io/Cursor.h",
-    "upstream/folly/io/IOBuf.h",
-    "upstream/folly/io/IOBufQueue.h",
-    "upstream/folly/io/ShutdownSocketSet.h",
-    "upstream/folly/io/async/Request.h",
+    "upstream/folly/experimental/AsymmetricMemoryBarrier.h",
   ],
   copts = [
-    "-std=c++14",
+    "-std=gnu++14",
     "-pthread",
   ],
   srcs = glob([
@@ -234,7 +230,7 @@ cc_library(
   defines = [
     "FOLLY_HAVE_VLA=0",
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":folly",
     # folly won't currently compile with boringssl
@@ -258,7 +254,7 @@ cc_library(
     "upstream/folly/futures/detail/*.h",
     "upstream/folly/experimental/fibers/*.h",
   ]),
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":async",
     ":folly",
@@ -274,7 +270,7 @@ cc_library(
   defines = [
     "FOLLY_HAVE_VLA=0",
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":async",
     "//external:libssl",
@@ -325,7 +321,7 @@ cc_library(
     "upstream/folly/experimental/io/FsUtil.cpp",
     "upstream/folly/experimental/io/HugePages.cpp",
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":folly",
     "//third_party/boost:filesystem",
@@ -342,7 +338,7 @@ cc_library(
   srcs = [
     "upstream/folly/experimental/TestUtil.cpp",
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":base",
     ":folly",
@@ -361,7 +357,7 @@ cc_library(
   srcs = [
     "upstream/folly/Benchmark.cpp",
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":folly",
     "//third_party/boost:function_types",
@@ -375,7 +371,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/AsciiCaseInsensitiveTest.cpp"
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":base",
     "//third_party/gflags",
@@ -401,7 +397,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/ProducerConsumerQueueTest.cpp"
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":base",
     "//third_party/boost:core",
@@ -414,7 +410,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/StringTest.cpp"
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":base",
     ":benchmark",
@@ -428,7 +424,7 @@ cc_binary(
   srcs = [
     "upstream/folly/test/SubprocessTestParentDeathHelper.cpp"
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":folly",
     ":recordio",
@@ -442,7 +438,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/SubprocessTest.cpp"
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":folly",
     ":benchmark",
@@ -461,7 +457,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/UriTest.cpp"
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":folly",
     ":benchmark",
@@ -475,7 +471,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/VarintTest.cpp"
   ],
-  copts = ["-std=c++14"],
+  copts = ["-std=gnu++14"],
   deps = [
     ":folly",
     ":benchmark",
