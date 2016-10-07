@@ -52,11 +52,25 @@ CONTEXT_K8_LINUX_ASM = [
   boost_path + "/context/src/asm/make_x86_64_sysv_elf_gas.S",
 ]
 
+CONTEXT_DARWIN_ASM = [
+    boost_path + "/context/src/asm/jump_x86_64_sysv_macho_gas.S",
+    boost_path + "/context/src/asm/make_x86_64_sysv_macho_gas.S",
+]
+
+filegroup(
+    name = "context_asm",
+    srcs = select({
+      ":darwin": CONTEXT_DARWIN_ASM,
+      ":linux": CONTEXT_K8_LINUX_ASM,
+  }),
+)
+
 boost_library(
   name = "context",
   srcs = [
     boost_path + "/context/src/execution_context.cpp",
-  ] + CONTEXT_K8_LINUX_ASM,
+    ":context_asm",
+  ],
   deps = [
     ":config"
   ],
@@ -330,4 +344,14 @@ boost_library(
     ":math",
     ":type_index",
   ]
+)
+
+config_setting(
+    name = "darwin",
+    values = {"cpu": "darwin"},
+)
+
+config_setting(
+    name = "linux",
+    values = {"cpu": "k8"},
 )

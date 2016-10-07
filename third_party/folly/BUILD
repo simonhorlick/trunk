@@ -61,11 +61,14 @@ cc_library(
   visibility = ["//visibility:public"],
   includes = [
     "upstream",
-    "linux-k8",
-  ],
-  hdrs = [
-    "linux-k8/folly/folly-config.h",
-    "upstream/folly/ApplyTuple.h",
+  ] + select({
+      ":linux": ["linux-k8"],
+      ":darwin": ["darwin"],
+  }),
+  hdrs = select({
+      ":linux": ["linux-k8/folly/folly-config.h"],
+      ":darwin": ["darwin/folly/folly-config.h"],
+  }) + ["upstream/folly/ApplyTuple.h",
     "upstream/folly/CPortability.h",
     "upstream/folly/Conv.h",
     "upstream/folly/CpuId.h",
@@ -494,4 +497,14 @@ cc_test(
     "//third_party/gflags",
     "//third_party/gtest",
   ]
+)
+
+config_setting(
+    name = "darwin",
+    values = {"cpu": "darwin"},
+)
+
+config_setting(
+    name = "linux",
+    values = {"cpu": "k8"},
 )

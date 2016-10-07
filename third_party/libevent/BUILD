@@ -1,13 +1,22 @@
 licenses(["notice"])
+
+filegroup(
+  name = "platform_headers",
+  srcs = select({
+      ":darwin": [
+          "darwin/config.h",
+          "darwin/event-config.h",
+      ],
+      ":linux": [
+          "linux-k8/config.h",
+          "linux-k8/event-config.h",
+          "upstream/epoll.c",
+      ],
+  }),
+)
 cc_library(
   visibility = ["//visibility:public"],
-  includes = [
-    "upstream",
-    "linux-k8",
-  ],
-  srcs = [
-    "linux-k8/event-config.h",
-    "linux-k8/internal/config.h",
+  srcs = [":platform_headers"] + [
     "upstream/evdns.h",
     "upstream/evsignal.h",
     "upstream/log.h",
@@ -28,19 +37,40 @@ cc_library(
     "upstream/evdns.c",
     "upstream/strlcpy.c",
     "upstream/signal.c",
-    "upstream/epoll.c",
     "upstream/poll.c",
     "upstream/select.c",
+    "upstream/compat/sys/queue.h",
   ],
   hdrs = [
     "upstream/event.h",
     "upstream/evhttp.h",
   ],
   name = "libevent",
-  copts = [
-    "-DHAVE_CONFIG_H",
-    "-Ithird_party/libevent/upstream/compat",
-    "-Ithird_party/libevent/linux-k8/internal",
-    "-Wno-unused-but-set-variable",
-  ],
+  copts = select({
+      ":darwin" : [
+          "-DHAVE_CONFIG_H",
+          "-Ithird_party/libevent/darwin",
+          "-Ithird_party/libevent/upstream",
+          "-Ithird_party/libevent/upstream/compat",
+          "-Ithird_party/libevent/upstream/compat/sys",
+      ],
+      ":linux": [
+          "-DHAVE_CONFIG_H",
+          "-Ithird_party/libevent/linux-k8",
+          "-Ithird_party/libevent/upstream",
+          "-Ithird_party/libevent/upstream/compat",
+          "-Ithird_party/libevent/upstream/compat/sys",
+      ],
+      "//conditions:default" : [],
+  }),
+)
+
+config_setting(
+    name = "darwin",
+    values = {"cpu": "darwin"},
+)
+
+config_setting(
+    name = "linux",
+    values = {"cpu": "k8"},
 )

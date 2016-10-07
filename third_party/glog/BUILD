@@ -3,14 +3,9 @@ licenses(["notice"])
 filegroup(
   name = "platform_config",
   srcs = select({
-      ":darwin": [
-        "glog_build/darwin/src/config.h",
-      ],
-      ":linux": [
-        "glog_build/k8/src/config.h",
-      ],
+      ":darwin": ["glog_build/darwin/src/config.h"],
+      ":linux": ["glog_build/k8/src/config.h"],
   }),
-  visibility = ["//visibility:public"],
 )
 
 filegroup(
@@ -41,7 +36,10 @@ cc_library(
   }) + ["//third_party/gflags:gflags"],
   includes = [
     "upstream/src",
-  ],
+  ] + select({
+      ":darwin": ["glog_build/darwin/include", "glog_build/darwin/src"],
+      ":linux": ["glog_build/k8/include", "glog_build/k8/src"],
+  }),
   copts = [
     "-DNO_FRAME_POINTER",
   ],

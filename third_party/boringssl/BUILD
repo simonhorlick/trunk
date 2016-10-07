@@ -1,92 +1,65 @@
-licenses(["notice"])
+licenses(["unencumbered"])
 
-config_setting(
-  name = "linux_x32",
-  values = {"cpu": "piii"},
+crypto_headers = glob(["src/include/openssl/*.h"])
+
+crypto_internal_headers = glob(["src/crypto/**/*.h"])
+
+crypto_sources = ["err_data.c"] + glob(
+    ["src/crypto/**/*.c"],
+    exclude = [
+        "src/crypto/**/*_test.c",
+        "src/crypto/**/example_*.c",
+    ],
 )
 
-config_setting(
-  name = "linux_x64",
-  values = {"cpu": "k8"},
-)
-
-config_setting(
-  name = "linux_arm",
-  values = {"cpu": "arm"},
-)
-
-config_setting(
-  name = "linux_aarch64",
-  values = {"cpu": "aarch64"},
-)
-
-boringssl_copts = [
+ssl_headers = [
+    "src/include/openssl/dtls1.h",
+    "src/include/openssl/ssl.h",
+    "src/include/openssl/ssl3.h",
+    "src/include/openssl/tls1.h",
 ]
 
-load('BUILD.generated', 'ssl_headers', 'ssl_internal_headers', 'ssl_sources',
-     'crypto_headers', 'crypto_internal_headers', 'crypto_sources',
-     'tool_sources', 'crypto_sources_linux_aarch64', 'crypto_sources_linux_arm',
-     'crypto_sources_linux_x86', 'crypto_sources_linux_x86_64')
+ssl_internal_headers = glob(["src/ssl/**/*.h"])
+
+ssl_sources = glob(["src/ssl/**/*.c"])
 
 cc_library(
-  name = 'crypto',
-  visibility = ["//visibility:public"],
-  hdrs = crypto_headers,
-  srcs = crypto_internal_headers + crypto_sources + select({
-    ":linux_x32": crypto_sources_linux_x86,
-    ":linux_x64": crypto_sources_linux_x86_64,
-    ":linux_arm": crypto_sources_linux_arm,
-    ":linux_aarch64": crypto_sources_linux_aarch64,
-    "//conditions:default": crypto_sources_linux_x86_64,
-  }),
-  defines = [
-    'BORINGSSL_IMPLEMENTATION',
-    'BORINGSSL_NO_STATIC_INITIALIZER',
-  ],
-  includes = [
-    'src/include'
-  ],
-  copts = boringssl_copts,
-  linkopts = [
-    '-pthread'
-  ]
+    name = "crypto",
+    srcs = crypto_internal_headers + crypto_sources,
+    hdrs = crypto_headers,
+    copts = ["-DOPENSSL_NO_ASM"],
+    includes = ["src/include"],
+    visibility = ["//visibility:public"],
 )
 
 cc_library(
-  name = 'ssl',
-  visibility = ["//visibility:public"],
-  hdrs = ssl_headers,
-  srcs = ssl_internal_headers + ssl_sources,
-  defines = [
-    'BORINGSSL_IMPLEMENTATION',
-    'BORINGSSL_NO_STATIC_INITIALIZER',
-  ],
-  includes = [
-    'src/include'
-  ],
-  copts = boringssl_copts,
-  linkopts = [
-    '-pthread'
-  ],
-  deps = [
-    ':crypto',
-  ]
+    name = "ssl",
+    srcs = ssl_internal_headers + ssl_sources,
+    hdrs = ssl_headers,
+    includes = ["src/include"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":crypto",
+    ],
 )
 
-cc_binary(
-  name = 'tool',
-  srcs = tool_sources + [
-    'src/tool/internal.h',
-    'src/tool/transport_common.h',
-  ],
-  deps = [
-    ':crypto',
-    ':ssl',
-  ]
+objc_library(
+    name = "crypto_objc",
+    srcs = crypto_internal_headers + crypto_sources,
+    hdrs = crypto_headers,
+    copts = ["-DOPENSSL_NO_ASM"],
+    includes = ["src/include"],
+    visibility = ["//visibility:public"],
 )
 
-load('BUILD.generated_tests', 'create_tests')
-
-create_tests(
-  copts = [],
+objc_library(
+    name = "ssl_objc",
+    srcs = ssl_internal_headers + ssl_sources,
+    hdrs = ssl_headers,
+    includes = ["src/include"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":crypto_objc",
+    ],
 )
+
