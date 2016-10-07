@@ -68,9 +68,12 @@ cc_library(
   hdrs = select({
       ":linux": ["linux-k8/folly/folly-config.h"],
       ":darwin": ["darwin/folly/folly-config.h"],
-  }) + glob(["upstream/folly/*.h"]) + [
+  })
+  + glob(["upstream/folly/*.h"])
+  + glob(["upstream/folly/portability/*.h"]) + [
     "upstream/folly/detail/ExceptionWrapper.h",
-    "upstream/folly/portability/SysSyscall.h",
+    "upstream/folly/detail/BitIteratorDetail.h",
+    "upstream/folly/detail/BitsDetail.h",
     "upstream/folly/experimental/io/FsUtil.h",
   ],
   copts = ["-std=c++14"],
