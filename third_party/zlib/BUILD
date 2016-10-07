@@ -37,5 +37,6 @@ cc_library(
   copts = [
     "-Wno-unused-variable",
     "-Wno-implicit-function-declaration",
+    "-Ithird_party/zlib/upstream",
   ],
 )
