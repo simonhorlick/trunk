@@ -260,7 +260,9 @@ cc_library(
   ],
   deps = [
     ":folly",
-    "//external:libssl",
+    # folly won't currently compile with boringssl
+    # (see https://github.com/facebook/folly/issues/198).
+    "//third_party/openssl:ssl",
     "//third_party/libevent",
     "//third_party/boost:iterator",
   ]
