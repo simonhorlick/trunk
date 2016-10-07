@@ -269,14 +269,8 @@ cc_library(
 cc_library(
   name = "ssl",
   visibility = ["//visibility:public"],
-  hdrs = [
-    "upstream/folly/io/async/AsyncSSLSocket.h",
-    "upstream/folly/io/async/SSLContext.h",
-  ],
-  srcs = [
-    "upstream/folly/io/async/AsyncSSLSocket.cpp",
-    "upstream/folly/io/async/SSLContext.cpp",
-  ],
+  hdrs = glob(["upstream/folly/io/async/ssl/**/.h"]),
+  srcs = glob(["upstream/folly/io/async/ssl/**/.cc"]),
   defines = [
     "FOLLY_HAVE_VLA=0",
   ],
