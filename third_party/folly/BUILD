@@ -210,23 +210,16 @@ cc_library(
 cc_library(
   name = "async",
   visibility = ["//visibility:public"],
-  srcs = [
-    "upstream/folly/io/async/AsyncSignalHandler.cpp",
-    "upstream/folly/io/async/AsyncSocket.cpp",
-    "upstream/folly/io/async/AsyncServerSocket.cpp",
-    "upstream/folly/io/async/AsyncUDPSocket.cpp",
-    "upstream/folly/io/async/AsyncTimeout.cpp",
-    "upstream/folly/io/async/EventBase.cpp",
-    "upstream/folly/io/async/EventBaseManager.cpp",
-    "upstream/folly/io/async/EventHandler.cpp",
-    "upstream/folly/io/async/HHWheelTimer.cpp",
-  ],
   hdrs = glob([
-    "upstream/folly/io/async/*.h",
+    "upstream/folly/io/async/**/*.h",
+  ], exclude = [
+    "upstream/folly/io/async/test/**",
+    "upstream/folly/io/async/ssl/test/**",
   ]) + [
     "upstream/folly/experimental/ExecutionObserver.h",
     "upstream/folly/futures/DrivableExecutor.h",
   ],
+  srcs = glob(["upstream/folly/io/async/**/*.cc"]),
   defines = [
     "FOLLY_HAVE_VLA=0",
   ],
@@ -247,12 +240,12 @@ cc_library(
   srcs = glob([
     "upstream/folly/futures/*.cpp",
     "upstream/folly/futures/detail/*.cpp",
-    "upstream/folly/experimental/fibers/*.cpp",
+    "upstream/folly/fibers/*.cpp",
   ]),
   hdrs = glob([
     "upstream/folly/futures/*.h",
     "upstream/folly/futures/detail/*.h",
-    "upstream/folly/experimental/fibers/*.h",
+    "upstream/folly/fibers/*.h",
   ]),
   copts = ["-std=gnu++14"],
   deps = [
