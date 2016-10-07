@@ -27,6 +27,7 @@ cc_library(
   srcs = glob([
     "upstream/proxygen/httpserver/*.cpp",
   ]),
+  copts = ["-std=gnu++14"],
   deps = [
     ":http",
     "//third_party/wangle",
@@ -61,8 +62,6 @@ genrule(
 
 cc_library(
   name = "http",
-  copts = [
-  ],
   includes = [
     "upstream",
     "http",  # bazel also search s $(GENDIR)/third_party/proxygen/http
@@ -85,6 +84,7 @@ cc_library(
   ]) + [
     ":gen_http_common_headers",
   ],
+  copts = ["-std=gnu++14"],
   deps = [
     ":ParseURL",
     ":utils",
@@ -109,6 +109,7 @@ cc_library(
   includes = [
     "upstream",
   ],
+  copts = ["-std=gnu++14"],
   deps = [
     "//third_party/folly:async",
     "//third_party/wangle:acceptor",
@@ -141,9 +142,6 @@ genrule(
 
 cc_library(
   name = "utils",
-  copts = [
-    "-I$(GENDIR)/third_party/proxygen/trace",
-  ],
   includes = [
     "upstream",
   ],
@@ -163,6 +161,10 @@ cc_library(
     "upstream/proxygen/lib/utils/ZlibStreamDecompressor.cpp",
     ":gen_trace_event_constants",
   ],
+  copts = [
+      "-std=gnu++14",
+      "-I$(GENDIR)/third_party/proxygen/trace",
+  ],
   deps = [
     "//third_party/folly",
     "//third_party/folly:async",
@@ -180,6 +182,7 @@ cc_library(
   srcs = [
     "upstream/proxygen/lib/utils/ParseURL.cpp"
   ],
+  copts = ["-std=gnu++14"],
   deps = [
     ":utils",
     ":external_http_parser",
@@ -191,6 +194,7 @@ cc_test(
   srcs = [
     "upstream/proxygen/lib/utils/test/CryptUtilTest.cpp",
   ],
+  copts = ["-std=gnu++14"],
   deps = [
     "//third_party/gtest:gtest_main",
     ":utils"
@@ -202,6 +206,7 @@ cc_test(
   srcs = [
     "upstream/proxygen/lib/utils/test/ParseURLTest.cpp",
   ],
+  copts = ["-std=gnu++14"],
   deps = [
     "//third_party/gtest:gtest_main",
     ":ParseURL"
@@ -219,6 +224,7 @@ cc_library(
   srcs = [
     "upstream/proxygen/httpserver/samples/echo/EchoHandler.cpp",
   ],
+  copts = ["-std=gnu++14"],
   deps = [
     ":http",
     ":httpserver",
@@ -231,6 +237,7 @@ cc_binary(
   srcs = [
     "upstream/proxygen/httpserver/samples/echo/EchoServer.cpp",
   ],
+  copts = ["-std=gnu++14"],
   deps = [
     ":httpserver",
     ":echo_handler",
