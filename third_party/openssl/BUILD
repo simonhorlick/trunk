@@ -22,20 +22,6 @@ openssl_copts = [
   '-DL_ENDIAN',
   '-O3',
   '-Wall',
-  '-DOPENSSL_IA32_SSE2',
-  '-DOPENSSL_BN_ASM_MONT',
-  '-DOPENSSL_BN_ASM_MONT5',
-  '-DOPENSSL_BN_ASM_GF2m',
-  '-DSHA1_ASM ',
-  '-DSHA256_ASM',
-  '-DSHA512_ASM',
-  '-DMD5_ASM',
-  '-DAES_ASM',
-  '-DVPAES_ASM',
-  '-DBSAES_ASM',
-  '-DWHIRLPOOL_ASM',
-  '-DGHASH_ASM',
-  '-DECP_NISTZ256_ASM',
   '-I' + PACKAGE_NAME + '/src/crypto',
   '-I' + PACKAGE_NAME + '/src/crypto/asn1',
   '-I' + PACKAGE_NAME + '/src/crypto/cmac',
@@ -43,6 +29,26 @@ openssl_copts = [
   '-I' + PACKAGE_NAME + '/src/crypto/modes',
   '-I' + PACKAGE_NAME + '/src',
 ]
+
+OPENSSL_ASM_COPTS = select({
+  ":linux_x64": [
+		'-DOPENSSL_IA32_SSE2',
+		'-DOPENSSL_BN_ASM_MONT',
+		'-DOPENSSL_BN_ASM_MONT5',
+		'-DOPENSSL_BN_ASM_GF2m',
+		'-DSHA1_ASM ',
+		'-DSHA256_ASM',
+		'-DSHA512_ASM',
+		'-DMD5_ASM',
+		'-DAES_ASM',
+		'-DVPAES_ASM',
+		'-DBSAES_ASM',
+		'-DWHIRLPOOL_ASM',
+		'-DGHASH_ASM',
+		'-DECP_NISTZ256_ASM',
+	],
+  "//conditions:default": ['-DOPENSSL_NO_ASM']
+})
 
 load('BUILD.generated', 'ssl_headers', 'ssl_internal_headers', 'ssl_sources',
      'crypto_headers', 'crypto_internal_headers', 'crypto_sources',
@@ -68,7 +74,7 @@ cc_library(
   ],
   srcs = crypto_internal_headers + crypto_sources + select({
     ":linux_x64": crypto_sources_linux_x86_64,
-    "//conditions:default": crypto_sources_linux_x86_64,
+    "//conditions:default": []
   }),
   textual_hdrs = [
     "src/crypto/LPdir_unix.c",
@@ -81,7 +87,7 @@ cc_library(
   includes = [
     'linux-x86_64/include',
   ],
-  copts = openssl_copts,
+  copts = openssl_copts + OPENSSL_ASM_COPTS,
   linkopts = [
     '-pthread'
   ]
