@@ -14,6 +14,11 @@ $ git submodule update --init
 $ bazel build examples/...:all
 ```
 
+Proxygen requires gperf to be installed:
+```sh
+$ sudo apt-get install -y gperf
+```
+
 Currently C++ projects can be only built on Linux x64 system.
 
 ##C++
