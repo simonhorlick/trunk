@@ -16,6 +16,12 @@ filegroup(
 )
 cc_library(
   visibility = ["//visibility:public"],
+  includes = [
+    "upstream",
+  ] + select({
+    ":linux": ["linux-k8"],
+    ":darwin": ["darwin"],
+  }),
   srcs = [":platform_headers"] + [
     "upstream/evdns.h",
     "upstream/evsignal.h",
@@ -46,22 +52,16 @@ cc_library(
     "upstream/evhttp.h",
   ],
   name = "libevent",
-  copts = select({
-      ":darwin" : [
-          "-DHAVE_CONFIG_H",
-          "-Ithird_party/libevent/darwin",
-          "-Ithird_party/libevent/upstream",
-          "-Ithird_party/libevent/upstream/compat",
-          "-Ithird_party/libevent/upstream/compat/sys",
-      ],
-      ":linux": [
-          "-DHAVE_CONFIG_H",
-          "-Ithird_party/libevent/linux-k8",
-          "-Ithird_party/libevent/upstream",
-          "-Ithird_party/libevent/upstream/compat",
-          "-Ithird_party/libevent/upstream/compat/sys",
-      ],
-      "//conditions:default" : [],
+  copts = [
+    "-Wno-unused-but-set-variable",
+    "-DHAVE_CONFIG_H",
+    "-Ithird_party/libevent/upstream",
+    "-Ithird_party/libevent/upstream/compat",
+    "-Ithird_party/libevent/upstream/compat/sys",
+  ] + select({
+      ":darwin" : ["-Ithird_party/libevent/darwin"],
+      ":linux": ["-Ithird_party/libevent/linux-k8"],
+      "//conditions:default": [],
   }),
 )
 
