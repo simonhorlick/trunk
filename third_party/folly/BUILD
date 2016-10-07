@@ -68,40 +68,12 @@ cc_library(
   hdrs = select({
       ":linux": ["linux-k8/folly/folly-config.h"],
       ":darwin": ["darwin/folly/folly-config.h"],
-  }) + ["upstream/folly/ApplyTuple.h",
-    "upstream/folly/CPortability.h",
-    "upstream/folly/Conv.h",
-    "upstream/folly/CpuId.h",
-    "upstream/folly/Demangle.h",
-    "upstream/folly/Exception.h",
-    "upstream/folly/ExceptionWrapper.h",
+  }) + glob(["upstream/folly/*.h"]) + [
     "upstream/folly/detail/ExceptionWrapper.h",
-    "upstream/folly/FBString.h",
-    "upstream/folly/FBVector.h",
-    "upstream/folly/Fingerprint.h",
-    "upstream/folly/Format-inl.h",
-    "upstream/folly/Format.h",
-    "upstream/folly/FormatArg.h",
-    "upstream/folly/FormatTraits.h",
-    "upstream/folly/Hash.h",
-    "upstream/folly/Likely.h",
-    "upstream/folly/Malloc.h",
-    "upstream/folly/MoveWrapper.h",
-    "upstream/folly/Portability.h",
-    "upstream/folly/portability/Syscall.h",
-    "upstream/folly/Preprocessor.h",
-    "upstream/folly/ProducerConsumerQueue.h",
-    "upstream/folly/Range.h",
-    "upstream/folly/ScopeGuard.h",
-    "upstream/folly/SpookyHashV1.h",
-    "upstream/folly/SpookyHashV2.h",
-    "upstream/folly/String-inl.h",
-    "upstream/folly/String.h",
-    "upstream/folly/ThreadName.h",
-    "upstream/folly/Traits.h",
-    "upstream/folly/Unicode.h",
+    "upstream/folly/portability/SysSyscall.h",
     "upstream/folly/experimental/io/FsUtil.h",
   ],
+  copts = ["-std=c++14"],
   srcs = [
     ":generate_format_tables",
     ":generate_escape_tables",
@@ -177,6 +149,7 @@ cc_library(
     "upstream/folly/io/async/Request.h",
   ],
   copts = [
+    "-std=c++14",
     "-pthread",
   ],
   srcs = glob([
@@ -258,6 +231,7 @@ cc_library(
   defines = [
     "FOLLY_HAVE_VLA=0",
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":folly",
     # folly won't currently compile with boringssl
@@ -281,6 +255,7 @@ cc_library(
     "upstream/folly/futures/detail/*.h",
     "upstream/folly/experimental/fibers/*.h",
   ]),
+  copts = ["-std=c++14"],
   deps = [
     ":async",
     ":folly",
@@ -302,6 +277,7 @@ cc_library(
   defines = [
     "FOLLY_HAVE_VLA=0",
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":async",
     "//external:libssl",
@@ -352,6 +328,7 @@ cc_library(
     "upstream/folly/experimental/io/FsUtil.cpp",
     "upstream/folly/experimental/io/HugePages.cpp",
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":folly",
     "//third_party/boost:filesystem",
@@ -368,6 +345,7 @@ cc_library(
   srcs = [
     "upstream/folly/experimental/TestUtil.cpp",
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":base",
     ":folly",
@@ -386,6 +364,7 @@ cc_library(
   srcs = [
     "upstream/folly/Benchmark.cpp",
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":folly",
     "//third_party/boost:function_types",
@@ -399,6 +378,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/AsciiCaseInsensitiveTest.cpp"
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":base",
     "//third_party/gflags",
@@ -424,6 +404,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/ProducerConsumerQueueTest.cpp"
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":base",
     "//third_party/boost:core",
@@ -436,6 +417,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/StringTest.cpp"
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":base",
     ":benchmark",
@@ -449,6 +431,7 @@ cc_binary(
   srcs = [
     "upstream/folly/test/SubprocessTestParentDeathHelper.cpp"
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":folly",
     ":recordio",
@@ -462,6 +445,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/SubprocessTest.cpp"
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":folly",
     ":benchmark",
@@ -480,6 +464,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/UriTest.cpp"
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":folly",
     ":benchmark",
@@ -493,6 +478,7 @@ cc_test(
   srcs = [
     "upstream/folly/test/VarintTest.cpp"
   ],
+  copts = ["-std=c++14"],
   deps = [
     ":folly",
     ":benchmark",

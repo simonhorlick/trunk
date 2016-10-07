@@ -8,6 +8,7 @@ cc_library(
   ],
   hdrs = glob(["upstream/wangle/acceptor/*.h"]),
   srcs = glob(["upstream/wangle/acceptor/*.cpp"]),
+	copts = ["-std=c++14"],
   deps = [
     ":ssl",
     "//third_party/folly:async",
@@ -28,6 +29,7 @@ cc_library(
   srcs = [
     "upstream/wangle/bootstrap/ServerBootstrap.cpp"
   ],
+	copts = ["-std=c++14"],
   deps = [
     ":acceptor",
     ":channel",
@@ -45,6 +47,7 @@ cc_library(
   ],
   hdrs = glob(["upstream/wangle/channel/*.h"]),
   srcs = glob(["upstream/wangle/channel/*.cpp"]),
+	copts = ["-std=c++14"],
   deps = [
     ":acceptor",
     ":concurrent",
@@ -64,6 +67,7 @@ cc_library(
     "upstream/wangle/deprecated/rx/*.h",
   ]),
   srcs = glob(["upstream/wangle/concurrent/*.cpp"]),
+	copts = ["-std=c++14"],
   deps = [
     "//third_party/folly:futures",
   ]
@@ -79,6 +83,7 @@ cc_library(
     'upstream/wangle/acceptor/SSLContextSelectionMisc.h'
   ],
   srcs = glob(["upstream/wangle/ssl/*.cpp"]),
+	copts = ["-std=c++14"],
   deps = [
     "//third_party/folly:ssl",
   ]
@@ -104,6 +109,7 @@ cc_test(
     "upstream/wangle/concurrent/test/GlobalExecutorTest.cpp",
     "upstream/wangle/concurrent/test/ThreadPoolExecutorTest.cpp",
   ],
+	copts = ["-std=c++14"],
   deps = [
     ":wangle",
     "//third_party/gtest:gtest_main",
@@ -113,6 +119,7 @@ cc_test(
 cc_library(
   name = "wangle",
   visibility = ["//visibility:public"],
+	copts = ["-std=c++14"],
   deps = [
     ":acceptor",
     ":bootstrap",
