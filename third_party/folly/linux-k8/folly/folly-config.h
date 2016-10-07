@@ -148,6 +148,14 @@
 #define FOLLY_HAVE_POW 1
 #endif
 
+/* Define to 1 if the compiler supports pthread_atfork */
+#ifndef FOLLY_HAVE_PTHREAD_ATFORK
+#define FOLLY_HAVE_PTHREAD_ATFORK 1
+#endif
+
+/* Define to 1 if the system has the type `pthread_spinlock_t'. */
+/* #undef HAVE_PTHREAD_SPINLOCK_T */
+
 /* Define to 1 if you have the `pthread_yield' function. */
 /* #undef HAVE_PTHREAD_YIELD */
 
